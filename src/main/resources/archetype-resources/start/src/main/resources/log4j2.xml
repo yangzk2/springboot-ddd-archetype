@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30" strict="true">
+    <Properties>
+        <Property name = "logPatternLayout">[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%p] [%t] - %m%n</Property>
+    </Properties>
+
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logPatternLayout}" />
+        </console>
+        <RollingFile name="RollingFileInfo" fileName="logs/info.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout pattern="${logPatternLayout}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="500 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+        <RollingFile name="RollingFileWarn" fileName="logs/warn.log" >
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout pattern="${logPatternLayout}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="500 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+        <RollingFile name="RollingFileError" fileName="logs/error.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+            <PatternLayout pattern="${logPatternLayout}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="500 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <!-- 第三方日志系统 -->
+        <logger name="org.apache.http" level="warn"/>
+        <logger name="org.springframework" level="DEBUG"></logger>
+        <!-- 如果想看到事务信息把这行注掉即可 -->
+        <!--<logger name="org.mybatis" level="INFO"></logger>-->
+        <logger name="org.apache.zookeeper" level="ERROR"></logger>
+        <logger name="com.zaxxer.hikari.pool.HikariPool" level="INFO"></logger>
+        <logger name="com.alibaba.dubbo" level="ERROR"></logger>
+        <logger name="RocketmqClient" level="ERROR"/>
+        <!--Springboot 启动信息去掉不需要的CONDITIONS EVALUATION REPORT-->
+        <logger name="org.springframework.boot.autoconfigure" level="ERROR"/>
+        <logger name="log.logger.java.sql" level="DEBUG"/>
+        <logger name="${package}" level="DEBUG" additivity="false">
+            <appender-ref ref="Console" />
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn" />
+            <appender-ref ref="RollingFileError" />
+        </logger>
+        <!-- 异步日志输出 -->
+        <asyncRoot level="INFO">
+            <appender-ref ref="Console" />
+            <appender-ref ref="RollingFileInfo" />
+            <appender-ref ref="RollingFileWarn" />
+            <appender-ref ref="RollingFileError" />
+        </asyncRoot>
+    </loggers>
+</Configuration>
