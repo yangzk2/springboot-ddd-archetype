@@ -5,14 +5,15 @@
 > 该脚手架主要是用来快速构建一个多modeule的SpringBoot的项目工程,生成后的项目结构如下
 ```text
 project
-  client--提供外部接口
-  common--内部或者外部公共依赖
-  server--服务核心和入口
+  start--服务启动类
+  api--提供外部接口
+  infra-- 基础设施服务
+  application--应用服务，多个服务领域间的聚合操作
+  domain--领域服务,核心业务逻辑处理
+  test-- 提供各服务层级间的测试使用
 ```
 第一版支持的功能
-- [x] 多module(目前分了server、common、client三个module)
-- [x] 规范异常处理，全局异常处理和(ControllerAdvice实现)
-- [x] 统一日志格式，植入全局链路traceId，方便根据日志定位问题
+- [x] 多module分层结果，采用整洁架构模型分层(目前分了start、api、infra、application、domain、test等个module)
 - [x] swagger管理接口文档
 - [x] 接入actuator和prometheus,对相关应用指标进行埋点
 
@@ -31,7 +32,7 @@ github代码[戳这里](https://github.com/DomoXian/springboot-maven-archetype)(
 ![定义元数据](introduce/img/define-project-2.png)
 ![定义工程目录和结构](introduce/img/define-project-3.png)
 #### 第四步
-编写脚手架代码，具体可以结合[代码](https://github.com/DomoXian/springboot-maven-archtype)看一下哈，这里就不过多叙述
+编写脚手架代码，具体可以结合[代码](https://github.com/yangzk2/springboot-ddd-archetype)看一下哈，这里就不过多叙述
 
 ## 二、编译和使用
 #### 编译
